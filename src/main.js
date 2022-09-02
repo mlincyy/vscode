@@ -156,7 +156,10 @@ function configureCommandlineSwitchesSync(cliArgs) {
 		'disable-hardware-acceleration',
 
 		// override for the color profile to use
-		'force-color-profile'
+		'force-color-profile',
+
+		// locale for Electron to use
+		'locale'
 	];
 
 	if (process.platform === 'linux') {
@@ -187,6 +190,13 @@ function configureCommandlineSwitchesSync(cliArgs) {
 			if (argvKey === 'force-color-profile') {
 				if (argvValue) {
 					app.commandLine.appendSwitch(argvKey, argvValue);
+				}
+			}
+
+			// Locale
+			else if (argvKey === 'locale') {
+				if (argvValue) {
+					app.commandLine.appendSwitch('lang', argvValue);
 				}
 			}
 

@@ -202,7 +202,9 @@ function configureCommandlineSwitchesSync(cliArgs) {
 					// adopts the getSystemLocale API.
 					// Ref https://github.com/microsoft/vscode/issues/159813
 					// and https://github.com/electron/electron/pull/35697
-					app.commandLine.appendSwitch('lang', argvValue ?? 'en');
+					const localeToUse = (!argvValue || argvValue === 'qps-ploc') ?
+						'en' : argvValue;
+					app.commandLine.appendSwitch('lang', localeToUse);
 				}
 			}
 

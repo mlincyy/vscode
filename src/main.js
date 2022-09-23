@@ -195,10 +195,15 @@ function configureCommandlineSwitchesSync(cliArgs) {
 
 			// Locale
 			else if (argvKey === 'locale') {
-				// Pass in the locale to Electron so that the Windows Control Overlay
-				// is rendered correctly.
-				// Ref https://github.com/microsoft/vscode/issues/159813
-				app.commandLine.appendSwitch('lang', argvValue ?? 'en');
+				if ('getSystemLocale' in app) {
+					// Pass in the locale to Electron so that the Windows Control Overlay
+					// is rendered correctly.
+					// The if statement can be removed when Electron officially
+					// adopts the getSystemLocale API.
+					// Ref https://github.com/microsoft/vscode/issues/159813
+					// and https://github.com/electron/electron/pull/35697
+					app.commandLine.appendSwitch('lang', argvValue ?? 'en');
+				}
 			}
 
 			// Others
@@ -562,7 +567,13 @@ async function resolveNlsConfiguration() {
 		// Try to use the app locale. Please note that the app locale is only
 		// valid after we have received the app ready event. This is why the
 		// code is here.
-		let appLocale = app.getLocale();
+
+		// The ternary and ts-ignore can both be removed once Electron
+		// officially adopts the getSystemLocale API.
+		// Ref https://github.com/electron/electron/pull/35697
+		let appLocale = 'getSystemLocale' in app ?
+			// @ts-ignore API not yet available in the official Electron
+			app.getSystemLocale() : app.getLocale();
 		if (!appLocale) {
 			nlsConfiguration = { locale: 'en', availableLanguages: {} };
 		} else {

@@ -195,7 +195,7 @@ function configureCommandlineSwitchesSync(cliArgs) {
 
 			// Locale
 			else if (argvKey === 'locale') {
-				if ('getSystemLocale' in app) {
+				if (product.quality === 'code-insiders') {
 					// Pass in the locale to Electron so that the Windows Control Overlay
 					// is rendered correctly.
 					// The if statement can be removed when Electron officially
@@ -573,7 +573,7 @@ async function resolveNlsConfiguration() {
 		// The ternary and ts-ignore can both be removed once Electron
 		// officially adopts the getSystemLocale API.
 		// Ref https://github.com/electron/electron/pull/35697
-		let appLocale = 'getSystemLocale' in app ?
+		let appLocale = product.quality === 'code-insiders' ?
 			// @ts-ignore API not yet available in the official Electron
 			app.getSystemLocale() : app.getLocale();
 		if (!appLocale) {

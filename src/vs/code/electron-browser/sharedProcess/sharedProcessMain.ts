@@ -108,6 +108,7 @@ import { UserDataProfilesNativeService } from 'vs/platform/userDataProfile/elect
 import { SharedProcessRequestService } from 'vs/platform/request/electron-browser/sharedProcessRequestService';
 import { OneDataSystemAppender } from 'vs/platform/telemetry/node/1dsAppender';
 import { UserDataProfilesCleaner } from 'vs/code/electron-browser/sharedProcess/contrib/userDataProfilesCleaner';
+import { IRemoteTunnelService } from 'vs/platform/remoteTunnel/common/remoteTunnel';
 
 class SharedProcessMain extends Disposable {
 
@@ -362,6 +363,9 @@ class SharedProcessMain extends Disposable {
 		// Tunnel
 		services.set(ISharedTunnelsService, new SyncDescriptor(SharedTunnelsService));
 		services.set(ISharedProcessTunnelService, new SyncDescriptor(SharedProcessTunnelService));
+
+		// Remote Tunnel
+		services.set(IRemoteTunnelService, new SyncDescriptor(RemoteTunnelService, undefined, false /* proxied to other processes */));
 
 		return new InstantiationService(services);
 	}
